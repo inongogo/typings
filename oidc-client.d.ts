@@ -1,4 +1,4 @@
-/// <reference path="../typings/globals/jsrsasign/index.d.ts" />
+/// <reference path="../jsrsasign/index.d.ts" />
 declare module "Log" {
     export default class Log {
         static NONE: number;
