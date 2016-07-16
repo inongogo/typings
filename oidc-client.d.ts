@@ -1,6 +1,6 @@
 /// <reference path="../jsrsasign/index.d.ts" />
 
-declare module Oidc {
+declare module 'oidc-client' {
     export class Log {
         static NONE: number;
         static ERROR: number;
