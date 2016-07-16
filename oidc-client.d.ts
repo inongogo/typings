@@ -1,6 +1,7 @@
 /// <reference path="../jsrsasign/index.d.ts" />
-declare module "Log" {
-    export default class Log {
+
+declare module Oidc {
+    export class Log {
         static NONE: number;
         static ERROR: number;
         static WARN: number;
@@ -12,9 +13,7 @@ declare module "Log" {
         static warn(...args: any[]): void;
         static error(...args: any[]): void;
     }
-}
-declare module "Global" {
-    export default class Global {
+    export class Global {
         static _testing(): void;
         static location: Location;
         static localStorage: Storage;
@@ -34,9 +33,7 @@ declare module "Global" {
             clearTimeout: (handle: any) => void;
         };
     }
-}
-declare module "Event" {
-    export default class Event {
+    export class Event {
         _name: any;
         _callbacks: any;
         constructor(name: any);
@@ -44,10 +41,7 @@ declare module "Event" {
         removeHandler(cb: any): void;
         raise(...params: any[]): void;
     }
-}
-declare module "Timer" {
-    import Event from "Event";
-    export default class Timer extends Event {
+    export class Timer extends Event {
         _timer: any;
         _timerHandle: any;
         constructor(name: any, timer?: {
@@ -58,10 +52,7 @@ declare module "Timer" {
         cancel(): void;
         _callback(): void;
     }
-}
-declare module "AccessTokenEvents" {
-    import Timer from "Timer";
-    export default class AccessTokenEvents {
+    export class AccessTokenEvents {
         _accessTokenExpiringNotificationTime: number;
         _accessTokenExpiring: Timer;
         _accessTokenExpired: Timer;
@@ -78,9 +69,7 @@ declare module "AccessTokenEvents" {
         addAccessTokenExpired(cb: any): void;
         removeAccessTokenExpired(cb: any): void;
     }
-}
-declare module "ErrorResponse" {
-    export default class ErrorResponse extends Error {
+    export class ErrorResponse extends Error {
         error: any;
         error_description: any;
         error_uri: any;
@@ -92,9 +81,7 @@ declare module "ErrorResponse" {
             state: any;
         });
     }
-}
-declare module "IFrameWindow" {
-    export default class IFrameWindow {
+    export class IFrameWindow {
         _promise: Promise<any>;
         _resolve: any;
         _reject: any;
@@ -113,16 +100,11 @@ declare module "IFrameWindow" {
         _origin: string;
         static notifyParent(url: any): void;
     }
-}
-declare module "IFrameNavigator" {
-    import IFrameWindow from "IFrameWindow";
-    export default class IFrameNavigator {
+    export class IFrameNavigator {
         prepare(): Promise<IFrameWindow>;
         callback(url: any): Promise<void>;
     }
-}
-declare module "InMemoryWebStorage" {
-    export default class InMemoryWebStorage {
+    export class InMemoryWebStorage {
         _data: any;
         constructor();
         getItem(key: any): any;
@@ -131,9 +113,7 @@ declare module "InMemoryWebStorage" {
         length: number;
         key(index: any): string;
     }
-}
-declare module "JoseUtil" {
-    export default class JoseUtil {
+    export class JoseUtil {
         parseJwt(jwt: any): {
             header: any;
             payload: any;
@@ -143,9 +123,7 @@ declare module "JoseUtil" {
         hashString(value: any, alg: any): any;
         hexToBase64Url(value: any): any;
     }
-}
-declare module "JsonService" {
-    export default class JsonService {
+    export class JsonService {
         _XMLHttpRequest: any;
         constructor(XMLHttpRequestCtor?: {
             new (): XMLHttpRequest;
@@ -159,10 +137,7 @@ declare module "JsonService" {
         });
         getJson(url: any, token: any): Promise<{}>;
     }
-}
-declare module "MetadataService" {
-    import JsonService from "JsonService";
-    export default class MetadataService {
+    export class MetadataService {
         _settings: any;
         _jsonService: any;
         constructor(settings: any, JsonServiceCtor?: typeof JsonService);
@@ -176,9 +151,7 @@ declare module "MetadataService" {
         getSigningKeys(): any;
         _filterSigningKeys(keys: any): any;
     }
-}
-declare module "WebStorageStateStore" {
-    export default class WebStorageStateStore {
+    export class WebStorageStateStore {
         _store: any;
         _prefix: any;
         constructor({prefix, store}?: {
@@ -190,23 +163,14 @@ declare module "WebStorageStateStore" {
         remove(key: any): Promise<any>;
         getAllKeys(): Promise<any[]>;
     }
-}
-declare module "UserInfoService" {
-    import JsonService from "JsonService";
-    import MetadataService from "MetadataService";
-    export default class UserInfoService {
+    export class UserInfoService {
         _settings: any;
         _jsonService: JsonService;
         _metadataService: MetadataService;
         constructor(settings: any, JsonServiceCtor?: typeof JsonService, MetadataServiceCtor?: typeof MetadataService);
         getClaims(token: any): any;
     }
-}
-declare module "ResponseValidator" {
-    import MetadataService from "MetadataService";
-    import UserInfoService from "UserInfoService";
-    import JoseUtil from "JoseUtil";
-    export default class ResponseValidator {
+    export class ResponseValidator {
         _settings: any;
         _metadataService: MetadataService;
         _userInfoService: UserInfoService;
@@ -223,12 +187,7 @@ declare module "ResponseValidator" {
         _validateIdToken(state: any, response: any): any;
         _validateAccessToken(response: any): Promise<void>;
     }
-}
-declare module "OidcClientSettings" {
-    import WebStorageStateStore from "WebStorageStateStore";
-    import ResponseValidator from "ResponseValidator";
-    import MetadataService from "MetadataService";
-    export default class OidcClientSettings {
+    export class OidcClientSettings {
         _authority: any;
         _metadataUrl: any;
         _metadata: any;
@@ -295,19 +254,12 @@ declare module "OidcClientSettings" {
         validator: any;
         metadataService: any;
     }
-}
-declare module "UrlUtility" {
-    import Global from "Global";
-    export default class UrlUtility {
+    export class UrlUtility {
         static addQueryParam(url: any, name: any, value: any): any;
         static parseUrlFragment(value: any, delimiter?: string, global?: typeof Global): any;
     }
-}
-declare module "random" {
     export default function random(): string;
-}
-declare module "State" {
-    export default class State {
+    export class State {
         _id: any;
         _data: any;
         _created: any;
@@ -323,10 +275,7 @@ declare module "State" {
         static fromStorageString(storageString: any): State;
         static clearStaleState(storage: any, age: any): any;
     }
-}
-declare module "SigninState" {
-    import State from "State";
-    export default class SigninState extends State {
+    export class SigninState extends State {
         _nonce: string;
         _authority: any;
         _client_id: any;
@@ -341,10 +290,7 @@ declare module "SigninState" {
         toStorageString(): string;
         static fromStorageString(storageString: any): SigninState;
     }
-}
-declare module "SigninRequest" {
-    import SigninState from "SigninState";
-    export default class SigninRequest {
+    export class SigninRequest {
         state: SigninState;
         url: any;
         constructor({url, client_id, redirect_uri, response_type, scope, authority, data, prompt, display, max_age, ui_locales, id_token_hint, login_hint, acr_values}: {
@@ -366,9 +312,7 @@ declare module "SigninRequest" {
         static isOidc(response_type: any): boolean;
         static isOAuth(response_type: any): boolean;
     }
-}
-declare module "SigninResponse" {
-    export default class SigninResponse {
+    export class SigninResponse {
         error: any;
         error_description: any;
         error_uri: any;
@@ -386,9 +330,7 @@ declare module "SigninResponse" {
         scopes: any;
         isOpenIdConnect: boolean;
     }
-}
-declare module "SignoutRequest" {
-    export default class SignoutRequest {
+    export class SignoutRequest {
         state: any;
         url: any;
         constructor({url, id_token_hint, post_logout_redirect_uri, data}: {
@@ -398,18 +340,14 @@ declare module "SignoutRequest" {
             data: any;
         });
     }
-}
-declare module "SignoutResponse" {
-    export default class SignoutResponse {
+    export class SignoutResponse {
         error: any;
         error_description: any;
         error_uri: any;
         state: any;
         constructor(url: any);
     }
-}
-declare module "OidcClient" {
-    export default class OidcClient {
+    export class OidcClient {
         _settings: any;
         constructor(settings?: any);
         _stateStore: any;
@@ -439,9 +377,7 @@ declare module "OidcClient" {
         processSignoutResponse(url: any, stateStore?: any): any;
         clearStaleState(stateStore: any): any;
     }
-}
-declare module "PopupWindow" {
-    export default class PopupWindow {
+    export class PopupWindow {
         _promise: Promise<any>;
         _resolve: any;
         _reject: any;
@@ -460,30 +396,21 @@ declare module "PopupWindow" {
         _origin: string;
         static notifyOpener(url: any): void;
     }
-}
-declare module "PopupNavigator" {
-    import PopupWindow from "PopupWindow";
-    export default class PopupNavigator {
+    export class PopupNavigator {
         prepare(params: any): Promise<PopupWindow>;
         callback(url: any): Promise<void>;
     }
-}
-declare module "RedirectNavigator" {
-    export default class RedirectNavigator {
+    export class RedirectNavigator {
         prepare(): Promise<this>;
         navigate(params: any): Promise<void>;
         url: string;
     }
-}
-declare module "SilentRenewService" {
-    export default class SilentRenewService {
+    export class SilentRenewService {
         _userManager: any;
         constructor(userManager: any);
         _tokenExpiring(): void;
     }
-}
-declare module "User" {
-    export default class User {
+    export class User {
         id_token: any;
         session_state: any;
         access_token: any;
@@ -508,14 +435,7 @@ declare module "User" {
         toStorageString(): string;
         static fromStorageString(storageString: any): User;
     }
-}
-declare module "UserManagerSettings" {
-    import OidcClientSettings from "OidcClientSettings";
-    import RedirectNavigator from "RedirectNavigator";
-    import PopupNavigator from "PopupNavigator";
-    import IFrameNavigator from "IFrameNavigator";
-    import WebStorageStateStore from "WebStorageStateStore";
-    export default class UserManagerSettings extends OidcClientSettings {
+    export class UserManagerSettings extends OidcClientSettings {
         _popup_redirect_uri: any;
         _popupWindowFeatures: any;
         _popupWindowTarget: any;
@@ -549,11 +469,7 @@ declare module "UserManagerSettings" {
         iframeNavigator: any;
         userStore: any;
     }
-}
-declare module "UserManagerEvents" {
-    import AccessTokenEvents from "AccessTokenEvents";
-    import Event from "Event";
-    export default class UserManagerEvents extends AccessTokenEvents {
+    export class UserManagerEvents extends AccessTokenEvents {
         _userLoaded: Event;
         _userUnloaded: Event;
         _silentRenewError: Event;
@@ -568,12 +484,7 @@ declare module "UserManagerEvents" {
         removeSilentRenewError(cb: any): void;
         _raiseSilentRenewError(e: any): void;
     }
-}
-declare module "UserManager" {
-    import OidcClient from "OidcClient";
-    import UserManagerEvents from "UserManagerEvents";
-    import SilentRenewService from "SilentRenewService";
-    export default class UserManager extends OidcClient {
+    export class UserManager extends OidcClient {
         _events: UserManagerEvents;
         _silentRenewService: SilentRenewService;
         constructor(settings?: any);
